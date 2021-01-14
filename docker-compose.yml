@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  web:
+    image: nginx
+    ports:
+      - 80:80
+    environment:
+      - MYSQL_DATABASE=badnotes
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=foobarbaz
+      - MYSQL_HOST=db
+    volumes:
+      - .:/var/www
+    depends_on:
+      - db
+  db:
+    image: mariadb
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABASE=badnotes
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=foobarbaz
+      - MYSQL_HOST=db
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./data/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+volumes:
+  db_data: { driver: local }
