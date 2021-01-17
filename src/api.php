@@ -1,1 +1,8 @@
 <?php
+
+function main()
+{
+
+}
+
+main();
