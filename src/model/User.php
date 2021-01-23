@@ -49,9 +49,8 @@ class User
      * @param string $password
      * @param array $notes
      */
-    public function __construct(int $id, string $name, string $email, string $password, array $notes)
+    public function __construct(string $name, string $email, string $password, array $notes)
     {
-        $this->id = $id;
         $this->name = $name;
         $this->email = $email;
         $this->password = $password;

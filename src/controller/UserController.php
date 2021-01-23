@@ -3,6 +3,10 @@
 
 namespace controller;
 
+use repository\IUserRepository;
+use User\User;
+use User\UserRepository;
+
 /**
  * Class UserController
  * @package controller
@@ -16,6 +20,7 @@ class UserController
     const INVALID_PASSWORD = 2;
     const INVALID_PASSWORD_REPEAT = 4;
     const EMAIL_IN_USE = 8;
+    const NAME_IN_USE = 16;
     private const MIN_PASSWORD_LENGTH = 6;
 
     public function createUser(string $name, string $email, string $password, string $passwordRepeated): int
@@ -26,18 +31,36 @@ class UserController
         if ($email == false) {
             $resultCode |= self::INVALID_EMAIL;
         }
-        // TODO: Check if E-Mail is in use
-
         if ($password != $passwordRepeated) {
             $resultCode |= self::INVALID_PASSWORD_REPEAT;
         }
-
         if (strlen($password) < self::MIN_PASSWORD_LENGTH) {
             $resultCode |= self::INVALID_PASSWORD;
         }
+        if ($resultCode != self::SUCCESS) {
+            return $resultCode;
+        }
 
-        if ($resultCode == self::SUCCESS) {
-            // TODO: entityManager create
+        // Check if user exists
+        $entityManager = getEntityManager();
+        /** @var IUserRepository $userRepo */
+        $userRepo = $entityManager->getRepository(UserRepository::class);
+        $user = $userRepo->findByName($name);
+
+        if ($user == null) {
+            $user = $userRepo->findByEmail($email);
+
+            if ($user == null) {
+                // Create user since it does not exist
+                $user = new User($name, $email, password_hash($password, PASSWORD_DEFAULT), []);
+
+                $entityManager->persist($user); // Todo: Exception Handling
+                $entityManager->flush();
+            } else {
+                $resultCode |= self::EMAIL_IN_USE;
+            }
+        } else {
+            $resultCode |= self::NAME_IN_USE;
         }
 
         return $resultCode;
