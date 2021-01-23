@@ -3,7 +3,12 @@
 
 namespace controller;
 
-
+/**
+ * Class UserController
+ * @package controller
+ *
+ * Responsibilities: Create, Replace, Update and Delete Users
+ */
 class UserController
 {
     const SUCCESS = 0;

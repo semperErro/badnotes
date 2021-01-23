@@ -17,10 +17,6 @@ if (!isset($_GET["page"])) {
 
 $page = in_array($_GET['page'], $pages) ? $_GET['page'] : '404.php';
 
-$_GET["page"] . ".php";
-
-// in_array($_GET['page'], $pages) ? $_GET['page'] : '404';
-
 if ($page == "notes.php" && !$_SESSION["loggedin"]) {
     $page = "login.php";
 }
