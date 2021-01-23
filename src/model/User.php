@@ -31,6 +31,11 @@ class User
     protected string $email;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    protected string $password;
+
+    /**
      * @var array
      * @ORM\OneToMany(targetEntity="Note", mappedBy="user", cascade={"ALL"}, indexBy="id")
      */
@@ -41,13 +46,15 @@ class User
      * @param int $id
      * @param string $name
      * @param string $email
+     * @param string $password
      * @param array $notes
      */
-    public function __construct(int $id, string $name, string $email, array $notes)
+    public function __construct(int $id, string $name, string $email, string $password, array $notes)
     {
         $this->id = $id;
         $this->name = $name;
         $this->email = $email;
+        $this->password = $password;
         $this->notes = $notes;
     }
 
