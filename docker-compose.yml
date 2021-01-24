@@ -2,7 +2,7 @@ version: '3'
 
 services:
   web:
-    image: nginx
+    image: nginx:latest
     ports:
       - 80:80
     environment:
@@ -11,10 +11,16 @@ services:
       - MYSQL_PASSWORD=foobarbaz
       - MYSQL_HOST=db
     volumes:
-      - ./default.conf:/etc/nginx/conf.d/default.conf
-      - ./public:/var/www/html
+      - ./site.conf:/etc/nginx/conf.d/default.conf
+      - .:/var/www/html
     depends_on:
       - db
+    links:
+      - php
+  php:
+    image: php:8.0.1-fpm
+    volumes:
+      - .:/var/www/html
   db:
     image: mariadb
     ports:

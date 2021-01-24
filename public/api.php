@@ -6,6 +6,8 @@ use User\UserRepository;
 
 session_start();
 
+const PAGES_DIR = "../view/pages/";
+
 function login()
 {
     if (!isset($_POST['email']) && !isset($_POST['passwd'])) {
@@ -33,7 +35,7 @@ function login()
     $_SESSION['loggedin'] = true;
     $_SESSION['id'] = $user->getId();
     $_SESSION['username'] = $user->getName();
-    header('location: home.php');
+    header('location: ' . PAGES_DIR . 'home.php');
 }
 
 function register()
@@ -45,7 +47,7 @@ function register()
 
     $userController = new UserController();
     $userController->createUser($_POST["name"], $_POST["email"], $_POST["passwd"], $_POST["passwd-repeated"]);
-    header('location: login.php');
+    header('location: ' . PAGES_DIR . 'login.php');
 }
 
 function post()
