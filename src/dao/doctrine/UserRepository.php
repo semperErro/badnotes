@@ -1,12 +1,12 @@
 <?php /** @noinspection PhpIncompatibleReturnTypeInspection */
 
 
-namespace User;
+namespace dao\doctrine;
 
 use Doctrine\ORM\EntityRepository;
-use repository\IUserRepository;
+use model\User;
 
-class UserRepository extends EntityRepository implements IUserRepository
+class UserRepository extends EntityRepository// implements IUserRepository
 {
     public function findById(int $id): ?User
     {
@@ -16,10 +16,5 @@ class UserRepository extends EntityRepository implements IUserRepository
     function findByEmail(string $email): ?User
     {
         return $this->findOneBy(["email" => $email]);
-    }
-
-    function findByName(string $name): ?User
-    {
-        return $this->findOneBy(["name" => $name]);
     }
 }

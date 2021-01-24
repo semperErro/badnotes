@@ -1,15 +1,14 @@
 <?php
 
 
-namespace Note;
+namespace model;
 
 use Doctrine\ORM\Mapping as ORM;
-use User\User;
 
 /**
  * Class Note
  * @package Note
- * @ORM\Entity(repositoryClass="NoteRepository")
+ * @ORM\Entity(repositoryClass="repository\doctrine\NoteRepository")
  * @ORM\Table(name="notes")
  */
 class Note

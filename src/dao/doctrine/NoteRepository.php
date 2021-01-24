@@ -1,13 +1,12 @@
 <?php
 
 
-namespace Note;
+namespace dao\doctrine;
 
 use Doctrine\ORM\EntityRepository;
-use repository\INoteRepository;
-use User\User;
+use model\User;
 
-class NoteRepository extends EntityRepository implements INoteRepository
+class NoteRepository extends EntityRepository// implements INoteRepository
 {
     public function findByUser(User $user): ?array
     {

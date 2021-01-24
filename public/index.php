@@ -1,8 +1,11 @@
 <?php
 
+require_once '../vendor/autoload.php';
+require_once '../config/bootstrap.php';
+
 use controller\UserController;
-use repository\IUserRepository;
-use User\UserRepository;
+use dao\doctrine\UserRepository;
+use dao\IUserDao;
 
 session_start();
 
@@ -10,13 +13,14 @@ const PAGES_DIR = '../view/pages/';
 
 function login()
 {
-    if (!isset($_POST['email']) && !isset($_POST['passwd'])) {
+    if (!isset($_POST['email']) && !isset($_POST['password'])) {
         echo 'Bad request';
         return;
     }
 
     $entityManager = getEntityManager();
-    /** @var IUserRepository $userRepo */
+    /** @var IUserDao $userRepo */
+    echo "Penis: " . UserRepository::class;
     $userRepo = $entityManager->getRepository(UserRepository::class);
     $user = $userRepo->findByEmail($_POST['email']);
     if ($user == null) {
@@ -25,7 +29,7 @@ function login()
     }
 
     $pw = $user->getPassword();
-    if (password_verify($_POST['passwd'], $pw)) {
+    if (password_verify($_POST['password'], $pw)) {
         echo 'Wrong password given';
         return;
     }
@@ -35,25 +39,30 @@ function login()
     $_SESSION['logged-in'] = true;
     $_SESSION['id'] = $user->getId();
     $_SESSION['username'] = $user->getName();
-    header('location: ' . PAGES_DIR . 'home.php');
+    header('location: /?page=notes');
 }
 
 function register()
 {
-    if (!isset($_POST['name']) && !isset($_POST['email']) && !isset($_POST['passwd']) && !isset($_POST['passwd-repeated'])) {
-        echo 'Bad request';
+    if (!isset($_POST['name']) && !isset($_POST['email']) && !isset($_POST['password']) && !isset($_POST['password-repeated'])) {
+        echo '400: Bad request';
         return;
     }
 
     $userController = new UserController();
-    $userController->createUser($_POST['name'], $_POST['email'], $_POST['passwd'], $_POST['passwd-repeated']);
-    header('location: ' . PAGES_DIR . 'login.php');
+    $code = $userController->createUser($_POST['name'], $_POST['email'], $_POST['password'], $_POST['password-repeated']);
+
+    if ($code == UserController::SUCCESS) {
+        header('location: /?page=login');
+    } else {
+        header('location: /?page=register');
+    }
 }
 
 function post()
 {
     if (!isset($_POST['action'])) {
-        echo 'Bad request';
+        echo '400: Bad request';
         return;
     }
 
@@ -65,7 +74,7 @@ function post()
             register();
             break;
         default:
-            echo 'Bad request';
+            echo '400: Bad request';
     }
 }
 

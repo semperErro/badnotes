@@ -3,9 +3,9 @@
 
 namespace controller;
 
-use repository\IUserRepository;
-use User\User;
-use User\UserRepository;
+use dao\doctrine\UserRepository;
+use dao\IUserDao;
+use model\User;
 
 /**
  * Class UserController
@@ -42,10 +42,10 @@ class UserController
         }
 
         // Check if user exists
-        $entityManager = getEntityManager();
-        /** @var IUserRepository $userRepo */
+        $entityManager = \getEntityManager();
+        /** @var IUserDao $userRepo */
         $userRepo = $entityManager->getRepository(UserRepository::class);
-        $user = $userRepo->findByName($name);
+        $user = $userRepo->findByName($name); // TODO
 
         if ($user == null) {
             $user = $userRepo->findByEmail($email);

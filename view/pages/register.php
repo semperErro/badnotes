@@ -7,11 +7,11 @@
     <label for="email">E-Mail:</label><br>
     <input type="email" id="email" name="email"><br>
 
-    <label for="passwd">Password:</label><br>
-    <input type="password" id="passwd" name="passwd"><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password"><br>
 
-    <label for="passwd">Repeat Password:</label><br>
-    <input type="password" id="passwd-repeat" name="passwd-repeat"><br>
+    <label for="password">Repeat Password:</label><br>
+    <input type="password" id="password-repeated" name="password-repeated"><br>
 
     <input type="checkbox" id="terms" name="terms" value="Terms">
     <label for="terms"> I accept the terms and conditions.</label><br>

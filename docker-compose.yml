@@ -7,7 +7,7 @@ services:
       - 80:80
     environment:
       - MYSQL_DATABASE=badnotes
-      - MYSQL_USER=root
+      - MYSQL_USER=baduser
       - MYSQL_PASSWORD=foobarbaz
       - MYSQL_HOST=db
     volumes:
@@ -27,9 +27,9 @@ services:
       - 3306:3306
     environment:
       - MYSQL_DATABASE=badnotes
-      - MYSQL_USER=root
+      - MYSQL_USER=baduser
+      - MYSQL_ROOT_PASSWORD=foobarbaz
       - MYSQL_PASSWORD=foobarbaz
-      - MYSQL_HOST=db
     volumes:
       - db_data:/var/lib/mysql
       - ./data/schema.sql:/docker-entrypoint-initdb.d/schema.sql

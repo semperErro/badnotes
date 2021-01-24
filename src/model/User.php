@@ -1,15 +1,15 @@
 <?php
 
 
-namespace User;
+namespace model;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class User
  * @package User
- * @ORM\Entity(repositoryClass="UserRepository")
- * @ORM\Table(name="user")
+ * @ORM\Entity(repositoryClass="repository\doctrine\UserRepository")
+ * @ORM\Table(name="users")
  */
 class User
 {
@@ -43,14 +43,17 @@ class User
 
     /**
      * User constructor.
-     * @param int $id
      * @param string $name
      * @param string $email
      * @param string $password
      * @param array $notes
+     * @param int $id
      */
-    public function __construct(string $name, string $email, string $password, array $notes)
+    public function __construct(string $name, string $email, string $password, array $notes, int $id = -1)
     {
+        if ($id > 0) {
+            $this->id = $id;
+        }
         $this->name = $name;
         $this->email = $email;
         $this->password = $password;

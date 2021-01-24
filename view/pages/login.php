@@ -4,8 +4,8 @@
     <label for="email">E-Mail:</label><br>
     <input type="email" id="email" name="email"><br>
 
-    <label for="passwd">Password:</label><br>
-    <input type="password" id="passwd" name="passwd"><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password"><br>
 
     <input type="checkbox" id="remember" name="remember" value="Remember">
     <label for="remember"> Remember me.</label><br>
