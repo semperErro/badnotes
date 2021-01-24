@@ -7,7 +7,7 @@ namespace dao\sql;
 use dao\INoteDao;
 use model\User;
 
-class SqlNoteDao implements INoteDao
+class SqlNoteDao extends AbstractSqlDao implements INoteDao
 {
 
     function findByUser(User $user): ?array
