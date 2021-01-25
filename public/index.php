@@ -8,7 +8,6 @@ use dao\sql\SqlDaoFactory;
 
 session_start();
 
-const PAGES_DIR = '../view/pages/';
 
 function login()
 {
@@ -26,7 +25,7 @@ function login()
     }
 
     $pw = $user->getPassword();
-    if (password_verify($_POST['password'], $pw)) {
+    if (!password_verify($_POST['password'], $pw)) {
         echo 'Wrong password given';
         return;
     }

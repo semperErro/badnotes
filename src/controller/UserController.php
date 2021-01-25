@@ -3,8 +3,8 @@
 
 namespace controller;
 
-use dao\doctrine\UserRepository;
-use dao\IUserDao;
+use dao\sql\SqlDaoFactory;
+use dao\sql\SqlUserDao;
 use model\User;
 
 /**
@@ -42,25 +42,22 @@ class UserController
         }
 
         // Check if user exists
-        $entityManager = \getEntityManager();
-        /** @var IUserDao $userRepo */
-        $userRepo = $entityManager->getRepository(UserRepository::class);
-        $user = $userRepo->findByName($name); // TODO
+        /*        $entityManager = \getEntityManager();
+                /** @var IUserDao $userRepo
+                $userRepo = $entityManager->getRepository(UserRepository::class);
+                $user = $userRepo->findByName($name); // TODO*/
 
+        $daoFactory = new SqlDaoFactory();
+        /** @var SqlUserDao $userDao */
+        $userDao = $daoFactory->createUserDao('users');
+
+        $user = $userDao->findByEmail($email);
         if ($user == null) {
-            $user = $userRepo->findByEmail($email);
-
-            if ($user == null) {
-                // Create user since it does not exist
-                $user = new User($name, $email, password_hash($password, PASSWORD_DEFAULT), []);
-
-                $entityManager->persist($user); // Todo: Exception Handling
-                $entityManager->flush();
-            } else {
-                $resultCode |= self::EMAIL_IN_USE;
-            }
+            // Create user since it does not exist
+            $user = new User($name, $email, password_hash($password, PASSWORD_DEFAULT), []);
+            $userDao->createUser($user);
         } else {
-            $resultCode |= self::NAME_IN_USE;
+            $resultCode |= self::EMAIL_IN_USE;
         }
 
         return $resultCode;

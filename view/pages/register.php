@@ -1,22 +1,33 @@
-<form method="post" action="/">
-    <input type="hidden" name="action" value="register">
+<form method="post" action="/" class="was-validated">
+    <input type="hidden" name="action" value="register"><br>
 
-    <label for="name">Name:</label><br>
-    <input type="text" id="name" name="name"><br>
+    <div class="form-group">
+        <label for="name">Name:</label><br>
+        <input type="text" class="form-control" id="name" name="name" required><br>
+    </div>
 
-    <label for="email">E-Mail:</label><br>
-    <input type="email" id="email" name="email"><br>
+    <div class="form-group">
+        <label for="email">E-Mail:</label><br>
+        <input type="email" class="form-control" id="email" name="email" required><br>
+    </div>
 
-    <label for="password">Password:</label><br>
-    <input type="password" id="password" name="password"><br>
+    <div class="form-group">
+        <label for="password">Password:</label><br>
+        <input type="password" class="form-control" id="password" name="password" required><br>
+    </div>
 
-    <label for="password">Repeat Password:</label><br>
-    <input type="password" id="password-repeated" name="password-repeated"><br>
+    <div class="form-group">
+        <label for="password">Repeat Password:</label><br>
+        <input type="password" class="form-control" id="password-repeated" name="password-repeated" required><br>
+    </div>
 
-    <input type="checkbox" id="terms" name="terms" value="Terms">
-    <label for="terms"> I accept the terms and conditions.</label><br>
+    <div class="form-group form-check">
+        <input type="checkbox" id="terms" name="terms" value="Terms">
+        <label for="terms"> I accept the terms and conditions.</label><br>
+    </div>
 
-    <input type="submit" value="Register">
+    <button class="btn btn-primary" type="submit" value="Register">Registrieren</button>
+    <br><br>
 
     <p>Schon registriert? <a href="/?page=login">Melde dich hier an.</a></p>
 </form>

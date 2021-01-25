@@ -6,11 +6,14 @@
 </head>
 <body>
 <? include "../view/templates/header.php" ?>
-<? /** @var string $page */
-include "../view/pages/" . $page . ".php" ?>
 
-Hello World! <br>
-<? echo "Page = " . $page ?>
+<div class="container">
+    <? /** @var string $page */
+    include "../view/pages/" . $page . ".php" ?>
+
+
+    <? echo "Page = " . $page ?>
+</div>
 
 <? include "../view/templates/footer.php" ?>
 </body>

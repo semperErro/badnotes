@@ -1,16 +1,26 @@
-<form method="post" action="/">
-    <input type="hidden" name="action" value="login">
+<form method="post" action="/" class="was-validated">
+    <input type="hidden" name="action" value="login"><br>
 
-    <label for="email">E-Mail:</label><br>
-    <input type="email" id="email" name="email"><br>
+    <div class="form-group">
+        <label for="email">E-Mail:</label><br>
+        <input type="email" id="email" name="email" class="form-control" required
+               placeholder="Gebe hier Deine E-Mail ein"><br>
+    </div>
 
-    <label for="password">Password:</label><br>
-    <input type="password" id="password" name="password"><br>
+    <div class="form-group">
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" class="form-control" required
+               placeholder="Gebe hier Dein Passwort ein"><br>
+    </div>
 
-    <input type="checkbox" id="remember" name="remember" value="Remember">
-    <label for="remember"> Remember me.</label><br>
+    <div class="form-group form-check">
+        <label for="remember" class="form-check-label">
+            <input type="checkbox" id="remember" name="remember" class="form-check-input" value="Remember">Remember me.
+        </label>
+    </div>
 
-    <input type="submit" value="Login">
+    <button type="submit" class="btn btn-primary">Einloggen</button>
+    <br><br>
 
     <p>Noch nicht registriert? <a href="/?page=register">Registriere dich hier.</a></p>
 </form>
