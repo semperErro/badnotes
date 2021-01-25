@@ -10,13 +10,13 @@ use dao\IUserDao;
 
 class SqlDaoFactory extends AbstractDaoFactory
 {
-    public function createNoteDao(): INoteDao
+    public function createNoteDao(string $tableName): INoteDao
     {
-        return new SqlNoteDao();
+        return new SqlNoteDao($tableName);
     }
 
-    public function createUserDao(): IUserDao
+    public function createUserDao(string $tableName): IUserDao
     {
-        return new SqlUserDao();
+        return new SqlUserDao($tableName);
     }
 }

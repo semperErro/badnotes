@@ -4,8 +4,7 @@ require_once '../vendor/autoload.php';
 require_once '../config/bootstrap.php';
 
 use controller\UserController;
-use dao\doctrine\UserRepository;
-use dao\IUserDao;
+use dao\sql\SqlDaoFactory;
 
 session_start();
 
@@ -18,11 +17,9 @@ function login()
         return;
     }
 
-    $entityManager = getEntityManager();
-    /** @var IUserDao $userRepo */
-    echo "Penis: " . UserRepository::class;
-    $userRepo = $entityManager->getRepository(UserRepository::class);
-    $user = $userRepo->findByEmail($_POST['email']);
+    $daoFactory = new SqlDaoFactory();
+    $dao = $daoFactory->createUserDao('users');
+    $user = $dao->findByEmail($_POST['email']);
     if ($user == null) {
         echo 'No user with such an E-Mail';
         return;
@@ -35,11 +32,11 @@ function login()
     }
 
     // Login User
-    session_start();
+    // session_start(); session has already been started
     $_SESSION['logged-in'] = true;
     $_SESSION['id'] = $user->getId();
     $_SESSION['username'] = $user->getName();
-    header('location: /?page=notes');
+    header('location: /?page=notes'); // vorher darf kein output geschehen
 }
 
 function register()

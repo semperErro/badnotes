@@ -10,12 +10,12 @@ use dao\IUserDao;
 class DoctrineDaoFactory extends \dao\AbstractDaoFactory
 {
 
-    public function createNoteDao(): INoteDao
+    public function createNoteDao(string $tableName): INoteDao
     {
         return new NoteRepository();
     }
 
-    public function createUserDao(): IUserDao
+    public function createUserDao(string $tableName): IUserDao
     {
         return new UserRepository();
     }

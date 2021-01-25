@@ -8,4 +8,4 @@ CREATE TABLE `users`
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='news/announcements to display on client dashboard';
 
 INSERT INTO `users` (name, email, password)
-VALUES ('Jon', 'jon.doa@gmail.com', '123456');
+VALUES ('Jon', 'jon.doa@gmail.com', '123456'); /* TODO: Wird nicht in den Container inserted */

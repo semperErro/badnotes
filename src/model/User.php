@@ -49,7 +49,7 @@ class User
      * @param array $notes
      * @param int $id
      */
-    public function __construct(string $name, string $email, string $password, array $notes, int $id = -1)
+    public function __construct(string $name, string $email, string $password, array $notes = [], int $id = -1)
     {
         if ($id > 0) {
             $this->id = $id;
