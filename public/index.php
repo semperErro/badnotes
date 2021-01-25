@@ -55,6 +55,13 @@ function register()
     }
 }
 
+function logout()
+{
+    session_unset();
+    session_destroy();
+    header('location: /');
+}
+
 function post()
 {
     if (!isset($_POST['action'])) {
@@ -81,7 +88,8 @@ function loadPage(string $page = '')
         'login',
         'register',
         '404',
-        'notes'
+        'notes',
+        'logout'
     ];
     $needAuthenticationPages = [
         'notes'
@@ -99,8 +107,14 @@ function loadPage(string $page = '')
         $page = '404';
     }
 
+    if (isset($_SESSION['logged-in']) && $_SESSION['logged-in'] && ($page == 'login' || $page == 'register')) {
+        header('location: /?page=notes');
+        return;
+    }
+
     if (in_array($page, $needAuthenticationPages) && !(isset($_SESSION['logged-in']) && $_SESSION['logged-in'])) {
-        $page = 'login';
+        header('location: /?page=login');
+        return;
     }
     include '../view/skeleton.php'; // $page is used here
 }
@@ -114,6 +128,9 @@ function get()
     switch ($_GET['action']) {
         case 'load-page':
             loadPage();
+            break;
+        case 'logout':
+            logout();
             break;
         default:
             echo '400: Unknown action';
