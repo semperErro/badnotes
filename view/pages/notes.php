@@ -12,10 +12,8 @@ use model\Note;
     <!--Sidebar-->
     <div class="row">
         <div class="col-3" style="background-color: lightblue">
-            <h1><?=
-                /** @var TextManager $texts */
-                $texts->getBaseText('app-title'); ?></h1>
             <? /** @var Note $note */
+            /** @var TextManager $texts */
             foreach ($texts->getParam('notes') as $note): ?>
                 <div class="note-title-item">
                     <?= $note->getTitle() ?>
