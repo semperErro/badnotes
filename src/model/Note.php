@@ -36,42 +36,44 @@ class Note
     protected int $date;
 
     /**
-     * @var User
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="notes")
+     * @var int
+     * @ORM\Column(type="integer")
      */
-    protected User $user;
+    protected int $userId;
 
     /**
-     * @return User
+     * @return int
      */
-    public function getUser(): User
+    public function getUserId(): int
     {
-        return $this->user;
+        return $this->userId;
     }
 
     /**
-     * @param User $user
+     * @param int $userId
      */
-    public function setUser(User $user): void
+    public function setUserId(int $userId): void
     {
-        $this->user = $user;
+        $this->userId = $userId;
     }
 
     /**
      * Note constructor.
-     * @param int $id
      * @param string $title
      * @param string $text
      * @param int $date
-     * @param User $user
+     * @param int $userId
+     * @param int $id
      */
-    public function __construct(int $id, string $title, string $text, int $date, User $user)
+    public function __construct(string $title, string $text, int $date, int $userId, int $id = -1)
     {
-        $this->id = $id;
+        if ($id >= 0) {
+            $this->id = $id;
+        }
         $this->title = $title;
         $this->text = $text;
         $this->date = $date;
-        $this->user = $user;
+        $this->userId = $userId;
     }
 
     /**

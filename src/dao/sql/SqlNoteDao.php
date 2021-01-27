@@ -6,27 +6,25 @@ namespace dao\sql;
 
 use dao\INoteDao;
 use model\Note;
-use model\User;
 use PDO;
 
 class SqlNoteDao extends AbstractSqlDao implements INoteDao
 {
-
-    public function findByUser(User $user): ?array
+    public function findByUserId(int $userId): ?array
     {
         $sql = "SELECT (`id`, `title`, `text`, `date`, `user_id`) FROM `$this->tableName` WHERE `user_id` = :user_id";
         /*"SELECT (id, title, text, date, `users`.`id`) FROM `$this->tableName`
             INNER JOIN `users` ON `users`.`id` = `$this->tableName`.`user_id`";*/
         $stmt = $this->pdo()->prepare($sql);
-        $stmt->bindValue(':user_id', $user->getId());
+        $stmt->bindValue(':user_id', $userId);
         if (!$stmt->execute()) {
             echo 'Could not execute statement';
             return null;
         }
 
         $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        array_walk($res, function ($dbNote) use ($user) {
-            return new Note($dbNote['id'], $dbNote['title'], $dbNote['text'], $dbNote['date'], $user);
+        array_walk($res, function ($dbNote) use ($userId) {
+            return new Note($dbNote['id'], $dbNote['title'], $dbNote['text'], $dbNote['date'], $userId);
         });
         return $res;
     }
@@ -39,7 +37,7 @@ class SqlNoteDao extends AbstractSqlDao implements INoteDao
         $stmt->bindValue(':title', $note->getTitle());
         $stmt->bindValue(':text', $note->getText());
         $stmt->bindValue(':date', $note->getDate());
-        $stmt->bindValue(':user_id', $note->getUser()->getId());
+        $stmt->bindValue(':user_id', $note->getUserId());
         return $stmt->execute();
     }
 
@@ -60,5 +58,17 @@ class SqlNoteDao extends AbstractSqlDao implements INoteDao
         $stmt = $this->pdo()->prepare($sql);
         $stmt->bindValue(':id', $id);
         return $stmt->execute();
+    }
+
+    function findById(int $id): ?Note
+    {
+        $res = $this->findOneByAttribute('id', $id);
+        if ($res == null || $res == []) {
+            return null;
+        }
+        $userId = $res['user_id'];
+
+
+        return new Note($res['title'], $res['text'], $res['date']);
     }
 }

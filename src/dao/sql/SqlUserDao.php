@@ -15,7 +15,7 @@ class SqlUserDao extends AbstractSqlDao implements IUserDao
         if ($res == [] || $res == null) {
             return null;
         }
-        return new User($res['name'], $res['email'], $res['password'], [], $res['id']);
+        return new User($res['name'], $res['email'], $res['password'], $res['id']);
     }
 
     public function findByEmail(string $email): ?User
@@ -24,7 +24,7 @@ class SqlUserDao extends AbstractSqlDao implements IUserDao
         if ($res == [] || $res == null) {
             return null;
         }
-        return new User($res['name'], $res['email'], $res['password'], [], $res['id']);
+        return new User($res['name'], $res['email'], $res['password'], $res['id']);
     }
 
     public function createUser(User $user): bool

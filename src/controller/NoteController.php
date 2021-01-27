@@ -5,7 +5,6 @@ namespace controller;
 
 use dao\INoteDao;
 use model\Note;
-use model\User;
 
 /**
  * Class NoteController
@@ -26,16 +25,22 @@ class NoteController
         $this->dao = $dao;
     }
 
-    public function createNote(int $id, string $title, string $text, int $date, User $user): ?Note
+    public function createNote(string $title, string $text, int $date, int $userId): ?Note
     {
-        $note = new Note($id, $title, $text, $date, $user);
+        $note = new Note($title, $text, $date, $userId);
         return $this->dao->createNote($note) ? $note : null;
     }
 
-    public function updateNote(int $id, string $title, string $text, int $date, User $user): ?Note
+    public function updateNote(int $id, string $title, string $text, int $date, int $userId): ?Note
     {
-        $note = new Note($id, $title, $text, $date, $user);
-        return $this->dao->updateNote($note) ? $note : null;
+        $newNote = new Note($title, $text, $date, $userId, $id);
+        /** @var Note $oldNote */
+        $oldNote = $this->dao->findById($id);
+        if ($oldNote == null || $oldNote->getUserId() != $userId) {
+            return null;
+        }
+
+        return $this->dao->updateNote($newNote) ? $newNote : null;
     }
 
     public function deleteNote(int $id): bool

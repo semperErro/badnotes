@@ -3,13 +3,26 @@
 require_once '../vendor/autoload.php';
 require_once '../config/bootstrap.php';
 
+use controller\NoteController;
 use controller\UserController;
 use dao\sql\SqlDaoFactory;
 
 session_start();
 
 
-function login()
+function getUserController(): UserController
+{
+    $factory = new SqlDaoFactory();
+    return new UserController($factory->createUserDao('users'));
+}
+
+function getNoteController(): NoteController
+{
+    $factory = new SqlDaoFactory();
+    return new NoteController($factory->createNoteDao('notes'));
+}
+
+function login(): void
 {
     if (!isset($_POST['email']) && !isset($_POST['password'])) {
         echo 'Bad request';
@@ -33,19 +46,18 @@ function login()
     // Login User
     // session_start(); session has already been started
     $_SESSION['logged-in'] = true;
-    $_SESSION['id'] = $user->getId();
+    $_SESSION['user-id'] = $user->getId();
     $_SESSION['username'] = $user->getName();
     header('location: /?page=notes'); // vorher darf kein output geschehen
 }
 
-function register()
+function register(): void
 {
     if (!isset($_POST['name']) && !isset($_POST['email']) && !isset($_POST['password']) && !isset($_POST['password-repeated'])) {
-        echo '400: Bad request';
-        return;
+        die('400: Bad request');
     }
 
-    $userController = new UserController();
+    $userController = getUserController();
     $code = $userController->createUser($_POST['name'], $_POST['email'], $_POST['password'], $_POST['password-repeated']);
 
     if ($code == UserController::SUCCESS) {
@@ -55,18 +67,53 @@ function register()
     }
 }
 
-function logout()
+function logout(): void
 {
     session_unset();
     session_destroy();
     header('location: /');
 }
 
-function post()
+function createNote(): void
+{
+    if (!isset($_SESSION['user-id'])) {
+        die('400: Bad request');
+    }
+
+    $controller = getNoteController();
+    $controller->createNote('', '', time(), $_SESSION['user-id']);
+}
+
+function updateNote(): void
+{
+    if (!isset($_SESSION['user-id'])) {
+        die('400: Bad request');
+    }
+    if (!isset($_POST['note-id']) || !isset($_POST['title']) || !isset($_POST['text'])) {
+        die('400: Bad request');
+    }
+
+    $controller = getNoteController();
+    $controller->updateNote($_POST['note-id'], $_POST['title'], $_POST['text'], time(), $_SESSION['user-id']);
+}
+
+function deleteNote(): void
+{
+    if (!isset($_SESSION['user-id'])) {
+        die('400: Bad request');
+    }
+    if (!isset($_POST['note-id'])) {
+        die('400: Bad request');
+    }
+
+    $controller = getNoteController();
+    $controller->deleteNote($_POST['note-id']);
+}
+
+function post(): void
 {
     if (!isset($_POST['action'])) {
-        echo '400: Bad request';
-        return;
+        die('400: Bad request');
     }
 
     switch ($_POST['action']) {
@@ -76,12 +123,21 @@ function post()
         case 'register':
             register();
             break;
+        case 'create-note':
+            createNote();
+            break;
+        case 'update-note':
+            updateNote();
+            break;
+        case 'delete-note':
+            deleteNote();
+            break;
         default:
-            echo '400: Bad request';
+            die('400: Bad request');
     }
 }
 
-function loadPage(string $page = '')
+function loadPage(string $page = ''): void
 {
     $pages = [
         'home',
@@ -119,7 +175,7 @@ function loadPage(string $page = '')
     include '../view/skeleton.php'; // $page is used here
 }
 
-function get()
+function get(): void
 {
     if (!isset($_GET['action'])) {
         $_GET['action'] = 'load-page';
@@ -133,11 +189,11 @@ function get()
             logout();
             break;
         default:
-            echo '400: Unknown action';
+            die('400: Unknown action');
     }
 }
 
-function main()
+function main(): void
 {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'POST':
@@ -147,7 +203,7 @@ function main()
             get();
             break;
         default:
-            echo '400: Bad request';
+            die('400: Bad request');
     }
 }
 

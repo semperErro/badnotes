@@ -5,11 +5,12 @@ namespace dao;
 
 
 use model\Note;
-use model\User;
 
 interface INoteDao
 {
-    function findByUser(User $user): ?array;
+    function findById(int $id): ?Note;
+
+    function findByUserId(int $userId): ?array;
 
     function createNote(Note $note): bool;
 

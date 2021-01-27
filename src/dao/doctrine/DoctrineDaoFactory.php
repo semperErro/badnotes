@@ -4,10 +4,11 @@
 namespace dao\doctrine;
 
 
+use dao\AbstractDaoFactory;
 use dao\INoteDao;
 use dao\IUserDao;
 
-class DoctrineDaoFactory extends \dao\INoteDao
+class DoctrineDaoFactory extends AbstractDaoFactory
 {
 
     public function createNoteDao(string $tableName): INoteDao

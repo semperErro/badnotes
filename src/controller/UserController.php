@@ -3,6 +3,7 @@
 
 namespace controller;
 
+use dao\IUserDao;
 use dao\sql\SqlDaoFactory;
 use dao\sql\SqlUserDao;
 use model\User;
@@ -15,6 +16,7 @@ use model\User;
  */
 class UserController
 {
+    protected IUserDao $dao;
     const SUCCESS = 0;
     const INVALID_EMAIL = 1;
     const INVALID_PASSWORD = 2;
@@ -22,6 +24,15 @@ class UserController
     const EMAIL_IN_USE = 8;
     const NAME_IN_USE = 16;
     private const MIN_PASSWORD_LENGTH = 6;
+
+    /**
+     * UserController constructor.
+     * @param IUserDao $dao
+     */
+    public function __construct(IUserDao $dao)
+    {
+        $this->dao = $dao;
+    }
 
     public function createUser(string $name, string $email, string $password, string $passwordRepeated): int
     {
@@ -54,12 +65,17 @@ class UserController
         $user = $userDao->findByEmail($email);
         if ($user == null) {
             // Create user since it does not exist
-            $user = new User($name, $email, password_hash($password, PASSWORD_DEFAULT), []);
+            $user = new User($name, $email, password_hash($password, PASSWORD_DEFAULT));
             $userDao->createUser($user);
         } else {
             $resultCode |= self::EMAIL_IN_USE;
         }
 
         return $resultCode;
+    }
+
+    public function findUserById(int $id): ?User
+    {
+        return $this->dao->findById($id);
     }
 }

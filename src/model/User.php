@@ -4,6 +4,7 @@
 namespace model;
 
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * Class User
@@ -36,44 +37,20 @@ class User
     protected string $password;
 
     /**
-     * @var array
-     * @ORM\OneToMany(targetEntity="Note", mappedBy="user", cascade={"ALL"}, indexBy="id")
-     */
-    protected array $notes;
-
-    /**
      * User constructor.
      * @param string $name
      * @param string $email
      * @param string $password
-     * @param array $notes
      * @param int $id
      */
-    public function __construct(string $name, string $email, string $password, array $notes = [], int $id = -1)
+    public function __construct(string $name, string $email, string $password, int $id = -1)
     {
-        if ($id > 0) {
+        if ($id >= 0) {
             $this->id = $id;
         }
         $this->name = $name;
         $this->email = $email;
         $this->password = $password;
-        $this->notes = $notes;
-    }
-
-    /**
-     * @return array
-     */
-    public function getNotes(): array
-    {
-        return $this->notes;
-    }
-
-    /**
-     * @param array $notes
-     */
-    public function setNotes(array $notes): void
-    {
-        $this->notes = $notes;
     }
 
     /**
@@ -138,5 +115,14 @@ class User
     public function setPassword(string $password): void
     {
         $this->password = $password;
+    }
+
+    #[Pure] public function equals(User $that): bool
+    {
+        return
+            $this->getId() == $that->getId() &&
+            $this->getName() == $that->getName() &&
+            $this->getEmail() == $that->getEmail() &&
+            $this->getPassword() == $that->getPassword();
     }
 }
