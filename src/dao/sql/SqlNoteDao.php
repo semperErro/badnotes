@@ -12,7 +12,7 @@ class SqlNoteDao extends AbstractSqlDao implements INoteDao
 {
     public function findByUserId(int $userId): ?array
     {
-        $sql = "SELECT (`id`, `title`, `text`, `date`, `user_id`) FROM `$this->tableName` WHERE `user_id` = :user_id";
+        $sql = "SELECT `id`, `title`, `text`, `date`, `user_id` FROM `$this->tableName` WHERE `user_id` = :user_id";
         /*"SELECT (id, title, text, date, `users`.`id`) FROM `$this->tableName`
             INNER JOIN `users` ON `users`.`id` = `$this->tableName`.`user_id`";*/
         $stmt = $this->pdo()->prepare($sql);
@@ -23,10 +23,14 @@ class SqlNoteDao extends AbstractSqlDao implements INoteDao
         }
 
         $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        array_walk($res, function ($dbNote) use ($userId) {
-            return new Note($dbNote['id'], $dbNote['title'], $dbNote['text'], $dbNote['date'], $userId);
-        });
-        return $res;
+        /*array_walk($res, function ($dbNote) use ($userId) {
+            return new Note($dbNote['title'], $dbNote['text'], $dbNote['date'], $userId, $dbNote['id']);
+        });*/
+        $returnNotes = [];
+        foreach ($res as $dbNote) {
+            $returnNotes[] = new Note($dbNote['title'], $dbNote['text'], $dbNote['date'], $userId, $dbNote['id']);
+        }
+        return $returnNotes;
     }
 
     public function createNote(Note $note): bool

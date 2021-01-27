@@ -47,4 +47,9 @@ class NoteController
     {
         return $this->dao->deleteNote($id);
     }
+
+    public function getNotesByUserId(int $userId): ?array
+    {
+        return $this->dao->findByUserId($userId);
+    }
 }

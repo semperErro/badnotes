@@ -2,6 +2,7 @@
 
 require_once '../vendor/autoload.php';
 require_once '../config/bootstrap.php';
+require_once '../view/TextManager.php';
 
 use controller\NoteController;
 use controller\UserController;
@@ -139,6 +140,7 @@ function post(): void
 
 function loadPage(string $page = ''): void
 {
+    $texts = new TextManager();
     $pages = [
         'home',
         'login',
@@ -171,6 +173,16 @@ function loadPage(string $page = ''): void
     if (in_array($page, $needAuthenticationPages) && !(isset($_SESSION['logged-in']) && $_SESSION['logged-in'])) {
         header('location: /?page=login');
         return;
+    }
+    if ($page == 'notes') {
+        $notes = getNoteController()->getNotesByUserId($_SESSION['user-id']);
+        if ($notes == 0) {
+            die('400: Bad request');
+        }
+        $texts->addParam('notes', $notes);
+        if (count($notes)) {
+            $texts->addParam('open-note-id', $notes[0]->getId());
+        }
     }
     include '../view/skeleton.php'; // $page is used here
 }
