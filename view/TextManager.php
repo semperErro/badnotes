@@ -28,6 +28,11 @@ class TextManager
         return $this->param[$key];
     }
 
+    public function hasParam($key)
+    {
+        return isset($this->param[$key]);
+    }
+
     private static function createBaseTexts()
     {
         return [

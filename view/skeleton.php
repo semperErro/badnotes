@@ -5,7 +5,7 @@
     <title>Badnotes</title>
 </head>
 <body>
-<? include "../view/templates/header.php" ?>
+<?// include "../view/templates/header.php" ?>
 
     <? /** @var string $page */
     include "../view/pages/" . $page . ".php" ?>
