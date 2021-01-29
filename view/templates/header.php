@@ -1,9 +1,9 @@
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <a class="navbar-brand" href="/">
-<!--        <img src="../view/res/tux.png" alt="Logo">-->
+        <img src="../../view/res/tux.svg" alt="Logo">
         <h1 style="display: inline"><?=
             /** @var TextManager $texts */
-            $texts->hasParam('title-in-header') ? $texts->getBaseText('app-title') : '' ?></h1>
+            $texts->getBaseText('app-title'); ?></h1>
     </a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
@@ -22,7 +22,7 @@
         <span class="flex-grow-1"></span>
         <ul class="navbar-nav">
             <li class="nav-item">
-                <?php $lbl = isset($_SESSION['logged-in']) && $_SESSION['logged-in'] ? 'Logout' : 'Login';
+                <?php $lbl = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] ? 'Logout' : 'Login';
                 $loginLink = '/?page=login';
                 $logoutLink = '/?action=logout'; ?>
                 <a class="nav-link" href="<?= $lbl == 'Logout' ? $logoutLink : $loginLink; ?>"><?= $lbl ?></a>

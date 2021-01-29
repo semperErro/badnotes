@@ -46,20 +46,20 @@ function login(): void
 
     // Login User
     // session_start(); session has already been started
-    $_SESSION['logged-in'] = true;
-    $_SESSION['user-id'] = $user->getId();
+    $_SESSION['logged_in'] = true;
+    $_SESSION['user_id'] = $user->getId();
     $_SESSION['username'] = $user->getName();
     header('location: /?page=notes'); // vorher darf kein output geschehen
 }
 
 function register(): void
 {
-    if (!isset($_POST['name']) && !isset($_POST['email']) && !isset($_POST['password']) && !isset($_POST['password-repeated'])) {
+    if (!isset($_POST['name']) && !isset($_POST['email']) && !isset($_POST['password']) && !isset($_POST['password_repeated'])) {
         die('400: Bad request');
     }
 
     $userController = getUserController();
-    $code = $userController->createUser($_POST['name'], $_POST['email'], $_POST['password'], $_POST['password-repeated']);
+    $code = $userController->createUser($_POST['name'], $_POST['email'], $_POST['password'], $_POST['password_repeated']);
 
     if ($code == UserController::SUCCESS) {
         header('location: /?page=login');
@@ -77,38 +77,38 @@ function logout(): void
 
 function createNote(): void
 {
-    if (!isset($_SESSION['user-id'])) {
+    if (!isset($_SESSION['user_id'])) {
         die('400: Bad request');
     }
 
     $controller = getNoteController();
-    $controller->createNote('', '', time(), $_SESSION['user-id']);
+    $controller->createNote('', '', time(), $_SESSION['user_id']);
 }
 
 function updateNote(): void
 {
-    if (!isset($_SESSION['user-id'])) {
+    if (!isset($_SESSION['user_id'])) {
         die('400: Bad request');
     }
-    if (!isset($_POST['note-id']) || !isset($_POST['title']) || !isset($_POST['text'])) {
+    if (!isset($_POST['note_id']) || !isset($_POST['title']) || !isset($_POST['text'])) {
         die('400: Bad request');
     }
 
     $controller = getNoteController();
-    $controller->updateNote($_POST['note-id'], $_POST['title'], $_POST['text'], time(), $_SESSION['user-id']);
+    $controller->updateNote($_POST['note_id'], $_POST['title'], $_POST['text'], time(), $_SESSION['user_id']);
 }
 
 function deleteNote(): void
 {
-    if (!isset($_SESSION['user-id'])) {
+    if (!isset($_SESSION['user_id'])) {
         die('400: Bad request');
     }
-    if (!isset($_POST['note-id'])) {
+    if (!isset($_POST['note_id'])) {
         die('400: Bad request');
     }
 
     $controller = getNoteController();
-    $controller->deleteNote($_POST['note-id']);
+    $controller->deleteNote($_POST['note_id']);
 }
 
 function post(): void
@@ -124,13 +124,13 @@ function post(): void
         case 'register':
             register();
             break;
-        case 'create-note':
+        case 'create_note':
             createNote();
             break;
-        case 'update-note':
+        case 'update_note':
             updateNote();
             break;
-        case 'delete-note':
+        case 'delete_note':
             deleteNote();
             break;
         default:
@@ -165,17 +165,17 @@ function loadPage(string $page = ''): void
         $page = '404';
     }
 
-    if (isset($_SESSION['logged-in']) && $_SESSION['logged-in'] && ($page == 'login' || $page == 'register')) {
+    if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] && ($page == 'login' || $page == 'register')) {
         header('location: /?page=notes');
         return;
     }
 
-    if (in_array($page, $needAuthenticationPages) && !(isset($_SESSION['logged-in']) && $_SESSION['logged-in'])) {
+    if (in_array($page, $needAuthenticationPages) && !(isset($_SESSION['logged_in']) && $_SESSION['logged_in'])) {
         header('location: /?page=login');
         return;
     }
     if ($page == 'notes') {
-        $notes = getNoteController()->getNotesByUserId($_SESSION['user-id']);
+        $notes = getNoteController()->getNotesByUserId($_SESSION['user_id']);
         if ($notes == 0) {
             die('400: Bad request');
         }
@@ -190,11 +190,11 @@ function loadPage(string $page = ''): void
 function get(): void
 {
     if (!isset($_GET['action'])) {
-        $_GET['action'] = 'load-page';
+        $_GET['action'] = 'load_page';
     }
 
     switch ($_GET['action']) {
-        case 'load-page':
+        case 'load_page':
             loadPage();
             break;
         case 'logout':

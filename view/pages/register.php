@@ -18,7 +18,7 @@
 
     <div class="form-group">
         <label for="password">Repeat Password:</label><br>
-        <input type="password" class="form-control" id="password-repeated" name="password-repeated" required><br>
+        <input type="password" class="form-control" id="password_repeated" name="password_repeated" required><br>
     </div>
 
     <div class="form-group form-check">
