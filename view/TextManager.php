@@ -56,7 +56,41 @@ class TextManager
                     "de" => "Speichern",
                     "en" => "Save"
                 ],
-
+            "saved" =>
+                [
+                    "de" => "Gespeichert",
+                    "en" => "Saved"
+                ],
+            "create-note" =>
+                [
+                    "de" => "Notiz hinzufügen",
+                    "en" => "Create Note"
+                ],
+            "delete" =>
+                [
+                    "de" => "Löschen",
+                    "en" => "Delete"
+                ],
+            "unknown-error" =>
+                [
+                    "de" => "Unbekannter Fehler",
+                    "en" => "Unknown Error"
+                ],
+            "cancel" =>
+                [
+                    "de" => "Abbrechen",
+                    "en" => "Cancel"
+                ],
+            "delete-note" =>
+                [
+                    "de" => "Notiz löschen",
+                    "en" => "Delete Note"
+                ],
+            "really-delete-note" =>
+                [
+                    "de" => "Bist du sicher, dass du die Notiz löschen möchtest? Du kannst diesen Vorgang nicht mehr rückgängig machen!",
+                    "en" => "Are you sure you want to delete the note? You can not undo this action!"
+                ],
         ];
     }
 }

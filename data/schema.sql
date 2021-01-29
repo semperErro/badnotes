@@ -10,7 +10,7 @@ CREATE TABLE `users`
 CREATE TABLE `notes`
 (
     `id`       int(11) unsigned NOT NULL AUTO_INCREMENT,
-    `title`     varchar(150)  NOT NULL,
+    `title`     blob  NOT NULL,
     `text`    blob NOT NULL,
     `date`    int(11) NOT NULL,
     `user_id` int(11) NOT NULL,

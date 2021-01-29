@@ -82,7 +82,7 @@ function createNote(): void
     }
 
     $controller = getNoteController();
-    $controller->createNote('', '', time(), $_SESSION['user_id']);
+    $controller->createNote('Bad Note', '', time(), $_SESSION['user_id']);
 }
 
 function updateNote(): void
@@ -182,6 +182,8 @@ function loadPage(string $page = ''): void
         $texts->addParam('notes', $notes);
         if (count($notes)) {
             $texts->addParam('open-note-id', $notes[0]->getId());
+        } else {
+            $texts->addParam('open-note-id', -1);
         }
     }
     include '../view/skeleton.php'; // $page is used here

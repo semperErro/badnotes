@@ -15,10 +15,15 @@ use model\Note;
             <h1><?=
                 /** @var TextManager $texts */
                 $texts->getBaseText('app-title'); ?></h1>
+            <div class="note-title-item font-weight-bolder" onclick="addNote()">
+                <i class="fas fa-plus"></i> <?= $texts->getBaseText('create-note') ?>
+            </div>
+            <hr />
             <? /** @var Note $note */
             /** @var TextManager $texts */
             foreach ($texts->getParam('notes') as $note): ?>
                 <div class="note-title-item"
+                     id="<?= $note->getId() ?>-side"
                      onclick="openNote(<?= $note->getId() ?>)">
                     <?= $note->getTitle() ?>
                 </div>
@@ -36,13 +41,22 @@ use model\Note;
                                                         flex-grow-1"
                                    id="<?= $note->getId() ?>-title"
                                    value="<?= $note->getTitle() ?>"
+                                   oninput="updateSide(<?= $note->getId() ?>)"
                                    placeholder="<?= $texts->getBaseText('title') ?>">
-                            <button class="btn btn-sm btn-outline-info bn-btn"
-                                    style="display: inline; padding: 0; border: 0"
+                            <span class="small align-self-center"><?= date('d.m.Y', $note->getDate()) ?></span>
+                            <span
+                                    id="save-btn-tooltip"
+                                    title="<?= $texts->getBaseText('saved') ?>"
+                                    data-placement="left"
+                            ></span>
+                            <button class="btn btn-sm btn-outline-info align-self-center mx-1"
                                     onclick="saveNote(<?= $note->getId() ?>)"
 
                             ><?= $texts->getBaseText('save') ?></button>
-                            <span class="small"><?= date('d.m.Y', $note->getDate()) ?></span>
+                            <button class="btn btn-sm btn-outline-danger align-self-center mr-1"
+                                    data-toggle="modal" data-target="#delete-modal"
+                                    onclick="setDeleteNote(<?= $note->getId() ?>)"
+                            ><?= $texts->getBaseText('delete') ?></button>
 
                         </div>
                         <div contenteditable="true"
@@ -50,7 +64,34 @@ use model\Note;
                              class="note-content-text form-control no-border"><?= $note->getText() ?></div>
                     </div>
                 </div>
+
             <? endforeach ?>
+            <!-- The Modal -->
+            <div class="modal fade" id="delete-modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title"><?= $texts->getBaseText('delete-note') ?></h4>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <?= $texts->getBaseText('really-delete-note') ?>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-danger"
+                                    onclick="deleteNote()"><?= $texts->getBaseText('delete') ?></button>
+                            <button type="button" class="btn btn-sm btn-outline-info" data-dismiss="modal">
+                                <?= $texts->getBaseText('cancel') ?></button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -61,7 +102,7 @@ use model\Note;
     * {
 
         box-sizing: border-box;
-
+        font-family: '.AppleSystemUIFont', sans-serif;
         -webkit-tap-highlight-color: transparent; /* transparent with keyword */
     }
 
@@ -98,13 +139,18 @@ use model\Note;
 </style>
 
 <script>
-    let openNoteId = <?= $texts->getParam('open-note-id') ?>
+    let openNoteId = <?= $texts->getParam('open-note-id') ?>;
+    let deleteNoteId = -1;
+    const saveBtnTooltip = $('#save-btn-tooltip');
 
-    function openNote(noteId) {
-        if (noteId === openNoteId) {
+    function openNote(noteId, shellSave) {
+        if (noteId < 0) {
             return;
         }
-        saveNote(openNoteId);
+
+        if (typeof shellSave !== "undefined" && shellSave) {
+            saveNote(openNoteId);
+        }
         document.getElementById(openNoteId).style.display = 'none';
         document.getElementById(noteId).style.display = 'block';
         openNoteId = noteId;
@@ -117,30 +163,64 @@ use model\Note;
             data: {
                 action: 'create_note',
             }
-        }).done(function () {
-            alert('Erstellt');
+        }).done(function (msg) {
+            window.location.reload();
         }).fail(function () {
-            alert('Nicht Erstellt');
+            alert("<?= $texts->getBaseText('unknown-error') ?>");
         });
     }
 
+    function deleteNote() {
+        if (deleteNoteId < 0) {
+            return;
+        }
+        const noteId = deleteNoteId;
+        deleteNoteId = -1;
+        $.ajax({
+            method: 'post',
+            url: '/',
+            data: {
+                action: 'delete_note',
+                note_id: noteId
+            }
+        }).done(function () {
+            window.location.reload();
+        }).fail(function () {
+            alert("<?= $texts->getBaseText('unknown-error') ?>");
+        });
+    }
+
+    function setDeleteNote(noteId) {
+        deleteNoteId = noteId;
+    }
+
     function saveNote(noteId) {
-        const title = $(`#${noteId}-title`);
-        const text = $(`#${noteId}-text`);
+        const title = $(`#${noteId}-title`).val();
+        const text = $(`#${noteId}-text`).text();
         $.ajax({
             method: 'post',
             url: '/',
             data: {
                 action: 'update_note',
-                noteId: noteId,
+                note_id: noteId,
                 title: title,
                 text: text
             }
         }).done(function () {
-            alert('Gespeichert');
+            saveBtnTooltip.tooltip('show');
+            setTimeout(function () {
+                saveBtnTooltip.tooltip('hide');
+            }, 2000);
         }).fail(function () {
-            alert('Nicht Gespeichert');
+            alert("<?= $texts->getBaseText('unknown-error') ?>");
         });
     }
-    openNote(openNoteId);
+
+    function updateSide(noteId) {
+        const title = $(`#${noteId}-title`).val();
+        $(`#${noteId}-side`).text(title);
+    }
+
+    openNote(openNoteId, false);
+
 </script>

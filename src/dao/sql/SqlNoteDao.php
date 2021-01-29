@@ -35,9 +35,8 @@ class SqlNoteDao extends AbstractSqlDao implements INoteDao
 
     public function createNote(Note $note): bool
     {
-        $sql = "INSERT INTO `$this->tableName` (`id`, `title`, `text`, `date`, `user_id`) VALUES (:id, :title, :text, :date, :user_id)";
+        $sql = "INSERT INTO `$this->tableName` (`title`, `text`, `date`, `user_id`) VALUES (:title, :text, :date, :user_id)";
         $stmt = $this->pdo()->prepare($sql);
-        $stmt->bindValue(':id', $note->getId());
         $stmt->bindValue(':title', $note->getTitle());
         $stmt->bindValue(':text', $note->getText());
         $stmt->bindValue(':date', $note->getDate());
@@ -70,9 +69,6 @@ class SqlNoteDao extends AbstractSqlDao implements INoteDao
         if ($res == null || $res == []) {
             return null;
         }
-        $userId = $res['user_id'];
-
-
-        return new Note($res['title'], $res['text'], $res['date']);
+        return new Note($res['title'], $res['text'], $res['date'], $res['user_id']);
     }
 }
