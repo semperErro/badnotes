@@ -27,12 +27,18 @@ class NoteController
 
     public function createNote(string $title, string $text, int $date, int $userId): ?Note
     {
+        if ($title == '') {
+            $title = "Bad Note";
+        }
         $note = new Note($title, $text, $date, $userId);
         return $this->dao->createNote($note) ? $note : null;
     }
 
     public function updateNote(int $id, string $title, string $text, int $date, int $userId): ?Note
     {
+        if ($title == '') {
+            $title = "Bad Note";
+        }
         $newNote = new Note($title, $text, $date, $userId, $id);
         /** @var Note $oldNote */
         $oldNote = $this->dao->findById($id);

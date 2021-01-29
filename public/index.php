@@ -82,7 +82,7 @@ function createNote(): void
     }
 
     $controller = getNoteController();
-    $controller->createNote('Bad Note', '', time(), $_SESSION['user_id']);
+    $controller->createNote('', '', time(), $_SESSION['user_id']);
 }
 
 function updateNote(): void

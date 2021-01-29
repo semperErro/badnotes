@@ -195,8 +195,15 @@ use model\Note;
     }
 
     function saveNote(noteId) {
-        const title = $(`#${noteId}-title`).val();
+        const titleElement = $(`#${noteId}-title`);
+        let title = titleElement.val();
         const text = $(`#${noteId}-text`).text();
+
+        if (title === "") {
+            title = "Bad Note";
+            titleElement.val(title);
+            $(`#${noteId}-side`).text(title);
+        }
         $.ajax({
             method: 'post',
             url: '/',
