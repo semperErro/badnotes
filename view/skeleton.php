@@ -7,10 +7,8 @@
 <body>
 <? include "../view/templates/header.php" ?>
 
-    <? /** @var string $page */
-    include "../view/pages/" . $page . ".php" ?>
-
-
+<? /** @var string $page */
+include "../view/pages/" . $page . ".php" ?>
 
 <? include "../view/templates/footer.php" ?>
 </body>

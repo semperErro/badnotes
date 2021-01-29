@@ -13,7 +13,7 @@
     <div class="collapse navbar-collapse" id="navbar">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <?php $lbl = isset($_SESSION['logged-in']) && $_SESSION['logged-in'] ? 'Logout' : 'Login';
+                <?php $lbl = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] ? 'Logout' : 'Login';
                 $loginLink = '/?page=login';
                 $logoutLink = '/?action=logout'; ?>
                 <a class="nav-link" href="<?= $lbl == 'Logout' ? $logoutLink : $loginLink; ?>"><?= $lbl ?></a>
