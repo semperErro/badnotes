@@ -11,14 +11,16 @@ use model\Note;
 <div class="container-fluid">
     <!--Sidebar-->
     <div class="row">
-        <div class="col-3 sticky-top vh-100 p-0" style="background-color: #17a2b8; color: white">
+        <div class="col-3 sticky-top vh-100 p-0
+            <?= /** @var TextManager $texts */
+        $texts->getParam('theme') == 'dark' ? 'sidebar-dark' : 'sidebar-light' ?>"
+        >
             <h1><?=
-                /** @var TextManager $texts */
                 $texts->getBaseText('app-title'); ?></h1>
             <div class="note-title-item font-weight-bolder" onclick="addNote()">
                 <i class="fas fa-plus"></i> <?= $texts->getBaseText('create-note') ?>
             </div>
-            <hr />
+            <hr/>
             <? /** @var Note $note */
             /** @var TextManager $texts */
             foreach ($texts->getParam('notes') as $note): ?>
@@ -29,16 +31,19 @@ use model\Note;
                 </div>
             <? endforeach ?>
         </div>
+
         <!--Note content-->
-        <div class="col-9 p-0">
+        <? $contentTheme = $texts->getParam('theme') == 'dark' ? 'content-dark' : 'content-light' ?>
+        <div class="col-9 p-0 <?= $contentTheme ?>">
             <? include "../view/templates/header.php" ?>
             <? /** @var Note $note */
             foreach ($texts->getParam('notes') as $note): ?>
                 <div class="note-content" style="display: none" id="<?= $note->getId() ?>">
                     <div class="form-group">
                         <div class="d-flex">
-                            <input type="text" class="note-content-title form-control no-border font-weight-bolder
-                                                        flex-grow-1"
+                            <input type="text"
+                                   class="note-content-title form-control no-border font-weight-bolder
+                                        flex-grow-1  <?= $contentTheme ?>"
                                    id="<?= $note->getId() ?>-title"
                                    value="<?= $note->getTitle() ?>"
                                    oninput="updateSide(<?= $note->getId() ?>)"
@@ -61,7 +66,7 @@ use model\Note;
                         </div>
                         <div contenteditable="true"
                              id="<?= $note->getId() ?>-text"
-                             class="note-content-text form-control no-border"><?= $note->getText() ?></div>
+                             class="note-content-text form-control no-border <?= $contentTheme ?>"><?= $note->getText() ?></div>
                     </div>
                 </div>
 
@@ -69,7 +74,7 @@ use model\Note;
             <!-- The Modal -->
             <div class="modal fade" id="delete-modal">
                 <div class="modal-dialog">
-                    <div class="modal-content">
+                    <div class="modal-content <?= $contentTheme ?>">
 
                         <!-- Modal Header -->
                         <div class="modal-header">
@@ -110,6 +115,30 @@ use model\Note;
         font-family: 'Bradley Hand', 'Architects Daughter', cursive;
         text-align: center;
         color: #7100fa;
+    }
+
+    .sidebar-light {
+        background-color: #17a2b8;
+        color: white;
+    }
+
+    .sidebar-dark {
+        background-color: #0c464f;
+        color: #6c757d;
+    }
+
+    .content-light {
+        background-color: white;
+        color: black;
+    }
+
+    .content-dark {
+        background-color: #343a40;
+        color: #6c757d;
+    }
+    .content-dark:focus {
+        background-color: #343a40;
+        color: #6c757d;
     }
 
     .no-border {

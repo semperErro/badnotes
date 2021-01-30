@@ -186,6 +186,11 @@ function loadPage(string $page = ''): void
             $texts->addParam('open-note-id', -1);
         }
     }
+    if (isset($_GET['theme'])) {
+        $texts->addParam('theme', $_GET['theme']);
+    } else {
+        $texts->addParam('theme', 'light');
+    }
     include '../view/skeleton.php'; // $page is used here
 }
 

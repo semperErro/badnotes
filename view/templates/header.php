@@ -1,8 +1,9 @@
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<nav class="navbar navbar-expand-sm shadow-sm <?= /** @var TextManager $texts */
+$texts->getParam('theme') == 'dark' ? 'bg-dark navbar-dark' : '' ?>">
     <a class="navbar-brand" href="/">
-<!--        <img src="../../view/res/tux.svg" alt="Logo">-->
+        <!--        <img src="../../view/res/tux.svg" alt="Logo">-->
         <h1 style="display: inline"><?=
-            /** @var TextManager $texts */
+
             $texts->hasParam('header-show-title') ? $texts->getBaseText('app-title') : '' ?></h1>
     </a>
 
@@ -25,8 +26,16 @@
                 <a class="nav-link" href="<?= $lbl == 'Logout' ? $logoutLink : $loginLink; ?>"><?= $lbl ?></a>
                 <!-- TODO: href according to $lbl -->
             </li>
+            <? if (!(isset($_SESSION['logged_in']) && $_SESSION['logged_in'])): ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="/?page=register">Register</a>
+                </li>
+            <? endif; ?>
             <li class="nav-item">
-                <a class="nav-link" href="/?page=register">Register</a>
+                <a class="nav-link"
+                   href="/?page=notes&theme=<?= $texts->getParam('theme') == 'dark' ? 'light' : 'dark' ?>">
+                    <?= $texts->getParam('theme') == 'dark' ? 'Light' : 'Dark' ?>
+                </a>
             </li>
         </ul>
     </div>
