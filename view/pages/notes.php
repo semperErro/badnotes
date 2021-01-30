@@ -50,12 +50,12 @@ use model\Note;
                                    placeholder="<?= $texts->getBaseText('title') ?>">
                             <span class="small align-self-center"><?= date('d.m.Y', $note->getDate()) ?></span>
                             <span
-                                    id="save-btn-tooltip"
+                                    id="<?= $note->getId() ?>-save-btn-tooltip"
                                     title="<?= $texts->getBaseText('saved') ?>"
                                     data-placement="left"
                             ></span>
                             <button class="btn btn-sm btn-outline-info align-self-center mx-1"
-                                    onclick="saveNote(<?= $note->getId() ?>)"
+                                    onclick="saveNote(<?= $note->getId() ?>, true)"
 
                             ><?= $texts->getBaseText('save') ?></button>
                             <button class="btn btn-sm btn-outline-danger align-self-center mr-1"
@@ -171,7 +171,6 @@ use model\Note;
 <script>
     let openNoteId = <?= $texts->getParam('open-note-id') ?>;
     let deleteNoteId = -1;
-    const saveBtnTooltip = $('#save-btn-tooltip');
 
     function showText(noteId) {
         alert($(`#${noteId}-text`).text().replace("<br />", "asdfjklaösfj"));
@@ -184,10 +183,10 @@ use model\Note;
 
         if (typeof shellSave !== "undefined") {
             if (shellSave) {
-                saveNote(openNoteId);
+                saveNote(openNoteId, false);
             }
         } else {
-            saveNote(openNoteId);
+            saveNote(openNoteId, false);
         }
         document.getElementById(openNoteId).style.display = 'none';
         document.getElementById(noteId).style.display = 'block';
@@ -232,7 +231,8 @@ use model\Note;
         deleteNoteId = noteId;
     }
 
-    function saveNote(noteId) {
+    function saveNote(noteId, showSaved) {
+        const saveBtnTooltip = $(`#${noteId}-save-btn-tooltip`);
         const titleElement = $(`#${noteId}-title`);
         let title = titleElement.val();
         const text = $(`#${noteId}-text`).html();
@@ -252,10 +252,12 @@ use model\Note;
                 text: text
             }
         }).done(function () {
-            saveBtnTooltip.tooltip('show');
-            setTimeout(function () {
-                saveBtnTooltip.tooltip('hide');
-            }, 2000);
+            if (showSaved) {
+                saveBtnTooltip.tooltip('show');
+                setTimeout(function () {
+                    saveBtnTooltip.tooltip('hide');
+                }, 2000);
+            }
         }).fail(function () {
             alert("<?= $texts->getBaseText('unknown-error') ?>");
         });
