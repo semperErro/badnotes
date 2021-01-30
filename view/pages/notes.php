@@ -65,6 +65,7 @@ use model\Note;
 
                         </div>
                         <div contenteditable="true"
+                             style="white-space: pre-wrap"
                              id="<?= $note->getId() ?>-text"
                              class="note-content-text form-control no-border <?= $contentTheme ?>"><?= $note->getText() ?></div>
                     </div>
@@ -172,12 +173,20 @@ use model\Note;
     let deleteNoteId = -1;
     const saveBtnTooltip = $('#save-btn-tooltip');
 
+    function showText(noteId) {
+        alert($(`#${noteId}-text`).text().replace("<br />", "asdfjklaösfj"));
+    }
+
     function openNote(noteId, shellSave) {
         if (noteId < 0) {
             return;
         }
 
-        if (typeof shellSave !== "undefined" && shellSave) {
+        if (typeof shellSave !== "undefined") {
+            if (shellSave) {
+                saveNote(openNoteId);
+            }
+        } else {
             saveNote(openNoteId);
         }
         document.getElementById(openNoteId).style.display = 'none';
@@ -226,7 +235,7 @@ use model\Note;
     function saveNote(noteId) {
         const titleElement = $(`#${noteId}-title`);
         let title = titleElement.val();
-        const text = $(`#${noteId}-text`).text();
+        const text = $(`#${noteId}-text`).html();
 
         if (title === "") {
             title = "Bad Note";
