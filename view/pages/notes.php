@@ -121,11 +121,11 @@ use model\Note;
 
     .content-dark {
         background-color: #343a40;
-        color: #6c757d;
+        color: #828f96;
     }
     .content-dark:focus {
         background-color: #343a40;
-        color: #6c757d;
+        color: #828f96;
     }
 
     .no-border {
