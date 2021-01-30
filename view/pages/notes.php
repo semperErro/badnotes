@@ -103,20 +103,6 @@ use model\Note;
 </div>
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
-
-    * {
-
-        box-sizing: border-box;
-        font-family: '.AppleSystemUIFont', sans-serif;
-        -webkit-tap-highlight-color: transparent; /* transparent with keyword */
-    }
-
-    h1 {
-        font-family: 'Bradley Hand', 'Architects Daughter', cursive;
-        text-align: center;
-        color: #7100fa;
-    }
 
     .sidebar-light {
         background-color: #17a2b8;

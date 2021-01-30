@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm shadow-sm <?= /** @var TextManager $texts */
+<nav class="navbar navbar-expand-sm shadow-sm sticky-top <?= /** @var TextManager $texts */
 $texts->getParam('theme') == 'dark' ? 'bg-dark navbar-dark' : '' ?>">
     <a class="navbar-brand" href="/">
         <!--        <img src="../../view/res/tux.svg" alt="Logo">-->
@@ -31,12 +31,14 @@ $texts->getParam('theme') == 'dark' ? 'bg-dark navbar-dark' : '' ?>">
                     <a class="nav-link" href="/?page=register">Register</a>
                 </li>
             <? endif; ?>
+            <? if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']): ?>
             <li class="nav-item">
                 <a class="nav-link"
                    href="/?page=notes&theme=<?= $texts->getParam('theme') == 'dark' ? 'light' : 'dark' ?>">
                     <?= $texts->getParam('theme') == 'dark' ? 'Light' : 'Dark' ?>
                 </a>
             </li>
+            <? endif; ?>
         </ul>
     </div>
 </nav>

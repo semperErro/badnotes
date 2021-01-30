@@ -14,7 +14,21 @@
 <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+
     .btn-sm {
         padding: 3px 10px !important;
+    }
+
+    * {
+
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent; /* transparent with keyword */
+    }
+
+    h1 {
+        font-family: 'Bradley Hand', 'Architects Daughter', cursive;
+        text-align: center;
+        color: #7100fa;
     }
 </style>
